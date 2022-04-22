@@ -1,20 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialIcons } from "@expo/vector-icons";
+import PhotoScreen from "./src/screens/PhotoScreen";
+import VocabularyScreen from "./src/screens/VocabularyScreen";
 
-export default function App() {
+const Tab = createBottomTabNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName="Vocabulary"
+        screenOptions={{
+          tabBarActiveTintColor: "#ff6f00",
+        }}
+      >
+        <Tab.Screen
+          name="Vocabulary"
+          options={{
+            tabBarLabel: "Vocabulary",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="list-alt" size={size} color={color} />
+            ),
+          }}
+          component={VocabularyScreen}
+        />
+        <Tab.Screen
+          name="Translate"
+          options={{
+            tabBarLabel: "Translation",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="translate" size={size} color={color} />
+            ),
+          }}
+          component={PhotoScreen}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
