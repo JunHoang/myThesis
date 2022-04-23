@@ -29,22 +29,25 @@ const PhotoScreen = () => {
     requestCamera();
   }, []);
 
-  const cropImage = async (response) => {
-    const manipResult = await manipulateAsync(
-      response.uri,
-      [
-        {
-          crop: {
-            height: response.height * 0.6,
-            originX: response.width * 0.2,
-            originY: response.height * 0.15,
-            width: response.width * 0.6,
-          },
-        },
-      ],
-      { compress: 1, format: SaveFormat.JPEG }
-    );
-    return manipResult;
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  const takePhoto = async () => {
+    if (cameraRef) {
+      try {
+        let photo = await cameraRef.current.takePictureAsync({
+          allowsEditing: true,
+          quality: 0.5,
+        });
+        return photo;
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   const pickImage = async () => {
@@ -66,27 +69,12 @@ const PhotoScreen = () => {
             resize: { width: result.width * 0.7, height: result.height * 0.7 },
           },
         ],
-        { compress: 0.7, format: SaveFormat.JPEG }
+        { compress: 1, format: SaveFormat.JPEG }
       );
 
       setImage(manipResult.uri);
-      setShowCamera(false);
     } else {
       setShowCamera(true);
-    }
-  };
-
-  const takePhoto = async () => {
-    if (cameraRef) {
-      try {
-        let photo = await cameraRef.current.takePictureAsync({
-          allowsEditing: true,
-          quality: 0.5,
-        });
-        return photo;
-      } catch (e) {
-        console.log(e);
-      }
     }
   };
 
@@ -97,17 +85,28 @@ const PhotoScreen = () => {
     setShowCamera(false);
   };
 
+  const cropImage = async (response) => {
+    const manipResult = await manipulateAsync(
+      response.uri,
+      [
+        {
+          crop: {
+            height: response.height * 0.6,
+            originX: response.width * 0.2,
+            originY: response.height * 0.15,
+            width: response.width * 0.6,
+          },
+        },
+      ],
+      { compress: 1, format: SaveFormat.JPEG }
+    );
+    return manipResult;
+  };
+
   const handleCancel = () => {
     setShowCamera(true);
     setImage(null);
   };
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
 
   return (
     <View style={styles.container}>

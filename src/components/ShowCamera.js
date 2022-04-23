@@ -20,29 +20,8 @@ const ShowCamera = ({ handleClick, cameraRef, type, pickImage }) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleClick}>
-          <View
-            style={{
-              borderWidth: 2,
-              borderRadius: 50,
-              borderColor: "white",
-              height: 50,
-              width: 50,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            <View
-              style={{
-                borderWidth: 2,
-                borderRadius: 50,
-                borderColor: "white",
-                height: 40,
-                width: 40,
-                backgroundColor: "white",
-              }}
-            ></View>
+          <View style={styles.imageButtonOutside}>
+            <View style={styles.imageButtonInside}></View>
           </View>
         </TouchableOpacity>
         <View style={styles.button} />
@@ -77,6 +56,25 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "flex-end",
     alignItems: "center",
+  },
+  imageButtonOutside: {
+    borderWidth: 2,
+    borderRadius: 50,
+    borderColor: "white",
+    height: 50,
+    width: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 5,
+  },
+  imageButtonInside: {
+    borderWidth: 2,
+    borderRadius: 50,
+    borderColor: "white",
+    height: 40,
+    width: 40,
+    backgroundColor: "white",
   },
   text: {
     fontSize: 18,
