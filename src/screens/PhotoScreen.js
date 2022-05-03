@@ -9,6 +9,7 @@ import * as jpeg from "jpeg-js";
 import * as tf from "@tensorflow/tfjs";
 import * as mobilenet from "@tensorflow-models/mobilenet";
 import translate from "translate";
+import { withNavigationFocus } from "react-navigation";
 
 import ShowTranslation from "../components/ShowTranslation";
 import ShowCamera from "../components/ShowCamera";
@@ -105,13 +106,11 @@ const PhotoScreen = () => {
         });
         setPrediction(predictions[0].className);
         setTranslation(translation);
-        console.log("translation", translation);
       }
     } catch (error) {
       console.log("Exception Error: ", error);
     }
   };
-  console.log("prediction", prediction);
 
   const pickImage = async () => {
     setShowCamera(false);
@@ -202,7 +201,7 @@ const PhotoScreen = () => {
   );
 };
 
-export default PhotoScreen;
+export default withNavigationFocus(PhotoScreen);
 
 const styles = StyleSheet.create({
   container: {

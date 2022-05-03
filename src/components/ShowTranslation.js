@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
   View,
+  Alert,
   Button,
   ActivityIndicator,
 } from "react-native";
 import FlipCard from "react-native-flip-card";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { find, isEmpty } from "lodash";
 
 import ShowImage from "./ShowImage";
 
@@ -19,16 +22,54 @@ const ShowTranslation = ({
   setShowCamera,
   setImage,
 }) => {
+  const [vocabSaved, setVocabSaved] = useState(false);
   const handleCancel = () => {
     setShowCamera(true);
     setImage(null);
     setTranslation(null);
     setPrediction(null);
   };
+  const data = { english: prediction, suomi: translation };
+
+  useEffect(async () => {
+    const storage = await AsyncStorage.getItem("vocabulary");
+    if (isEmpty(storage)) {
+      setVocabSaved(false);
+    } else {
+      const vocabulary = JSON.parse(storage);
+      const foundVocab = find(vocabulary, data);
+      if (isEmpty(foundVocab)) {
+        setVocabSaved(false);
+      } else {
+        setVocabSaved(true);
+      }
+    }
+  }, [data]);
+
+  const handleSave = async () => {
+    try {
+      const storage = await AsyncStorage.getItem("vocabulary");
+      if (isEmpty(storage)) {
+        await AsyncStorage.setItem("vocabulary", JSON.stringify([data]));
+      } else {
+        const vocabulary = JSON.parse(storage);
+        const foundVocab = find(vocabulary, data);
+        if (isEmpty(foundVocab)) {
+          vocabulary.push(data);
+          await AsyncStorage.setItem("vocabulary", JSON.stringify(vocabulary));
+          setVocabSaved(true);
+        } else {
+          Alert.alert("This word is already saved");
+        }
+      }
+    } catch (e) {
+      console.log("Saving error", e);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <ShowImage image={image} />
+      <ShowImage image={image} handleCancel={handleCancel} />
       {translation ? (
         <FlipCard style={styles.cardContainer}>
           {/* Face Side */}
@@ -48,7 +89,10 @@ const ShowTranslation = ({
           <Text style={styles.loading}>Loading</Text>
         </View>
       )}
-      <Button title="Close" onPress={handleCancel} style={styles.container} />
+      {translation && !vocabSaved && (
+        <Button title="Save To Vocabulary" onPress={handleSave} />
+      )}
+      <Button title="Close" onPress={handleCancel} />
     </View>
   );
 };

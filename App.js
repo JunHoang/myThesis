@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import PhotoScreen from "./src/screens/PhotoScreen";
 import VocabularyScreen from "./src/screens/VocabularyScreen";
-
 import translate from "translate";
 
 translate.engine = "google";
@@ -34,6 +33,9 @@ const App = () => {
         />
         <Tab.Screen
           name="Translate"
+          screenOptions={{
+            unmountOnBlur: true,
+          }}
           options={{
             tabBarLabel: "Translation",
             tabBarIcon: ({ color, size }) => (
