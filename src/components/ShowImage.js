@@ -1,20 +1,13 @@
-import {
-  StyleSheet,
-  View,
-  ImageBackground,
-  Dimensions,
-  Button,
-} from "react-native";
+import { StyleSheet, View, ImageBackground, Dimensions } from "react-native";
 import React from "react";
 
-const ShowImage = ({ image, handleCancel }) => {
+const ShowImage = ({ image }) => {
   return (
     <View style={styles.container}>
       <ImageBackground
         source={{ uri: image }}
         style={styles.image}
       ></ImageBackground>
-      <Button title="Close" onPress={handleCancel} />
     </View>
   );
 };

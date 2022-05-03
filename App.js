@@ -5,6 +5,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import PhotoScreen from "./src/screens/PhotoScreen";
 import VocabularyScreen from "./src/screens/VocabularyScreen";
 
+import translate from "translate";
+
+translate.engine = "google";
+translate.key = process.env.GOOGLE_KEY;
+translate.from = "en";
+
 const Tab = createBottomTabNavigator();
 
 const App = () => {

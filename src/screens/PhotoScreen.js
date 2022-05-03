@@ -8,8 +8,9 @@ import "@tensorflow/tfjs-react-native";
 import * as jpeg from "jpeg-js";
 import * as tf from "@tensorflow/tfjs";
 import * as mobilenet from "@tensorflow-models/mobilenet";
+import translate from "translate";
 
-import ShowImage from "../components/ShowImage";
+import ShowTranslation from "../components/ShowTranslation";
 import ShowCamera from "../components/ShowCamera";
 
 const PhotoScreen = () => {
@@ -21,6 +22,7 @@ const PhotoScreen = () => {
   const [isTfReady, setIsTfReady] = useState(false);
   const [model, setModel] = useState(null);
   const [prediction, setPrediction] = useState(null);
+  const [translation, setTranslation] = useState(null);
 
   //Load MobileNetModel
   const loadMobileNetModel = async () => {
@@ -97,9 +99,13 @@ const PhotoScreen = () => {
       const raw = new Uint8Array(imgBuffer);
       const imageTensor = imageToTensor(raw);
       const predictions = await model.classify(imageTensor, 1);
-      console.log("predictions", predictions);
       if (predictions) {
+        const translation = await translate(predictions[0].className, {
+          to: "fi",
+        });
         setPrediction(predictions[0].className);
+        setTranslation(translation);
+        console.log("translation", translation);
       }
     } catch (error) {
       console.log("Exception Error: ", error);
@@ -170,11 +176,6 @@ const PhotoScreen = () => {
     detectObjects(image.base64);
   };
 
-  const handleCancel = () => {
-    setShowCamera(true);
-    setImage(null);
-  };
-
   return (
     <View style={styles.container}>
       {showCamera ? (
@@ -185,7 +186,17 @@ const PhotoScreen = () => {
           pickImage={pickImage}
         />
       ) : (
-        image && <ShowImage image={image} handleCancel={handleCancel} />
+        image && (
+          <ShowTranslation
+            image={image}
+            translation={translation}
+            prediction={prediction}
+            setTranslation={setTranslation}
+            setPrediction={setPrediction}
+            setShowCamera={setShowCamera}
+            setImage={setImage}
+          />
+        )
       )}
     </View>
   );
