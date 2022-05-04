@@ -23,12 +23,6 @@ const ShowTranslation = ({
   setImage,
 }) => {
   const [vocabSaved, setVocabSaved] = useState(false);
-  const handleCancel = () => {
-    setShowCamera(true);
-    setImage(null);
-    setTranslation(null);
-    setPrediction(null);
-  };
   const data = { english: prediction, suomi: translation };
 
   useEffect(async () => {
@@ -45,6 +39,13 @@ const ShowTranslation = ({
       }
     }
   }, [data]);
+
+  const handleCancel = () => {
+    setShowCamera(true);
+    setImage(null);
+    setTranslation(null);
+    setPrediction(null);
+  };
 
   const handleSave = async () => {
     try {

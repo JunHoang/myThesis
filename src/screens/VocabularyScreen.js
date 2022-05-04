@@ -53,7 +53,7 @@ const VocabularyScreen = ({ navigation }) => {
           </Text>
         </View>
         <View style={styles.icon}>
-          <TouchableOpacity onPress={(item) => handleDelete(item)}>
+          <TouchableOpacity onPress={handleDelete}>
             <MaterialIcons name="delete-outline" size={24} color="black" />
           </TouchableOpacity>
         </View>
