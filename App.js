@@ -33,9 +33,6 @@ const App = () => {
         />
         <Tab.Screen
           name="Translate"
-          screenOptions={{
-            unmountOnBlur: true,
-          }}
           options={{
             tabBarLabel: "Translation",
             tabBarIcon: ({ color, size }) => (

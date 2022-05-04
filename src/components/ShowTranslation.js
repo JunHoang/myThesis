@@ -69,7 +69,7 @@ const ShowTranslation = ({
 
   return (
     <View style={styles.container}>
-      <ShowImage image={image} handleCancel={handleCancel} />
+      <ShowImage image={image} />
       {translation ? (
         <FlipCard style={styles.cardContainer}>
           {/* Face Side */}
