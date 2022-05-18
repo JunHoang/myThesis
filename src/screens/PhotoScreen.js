@@ -99,13 +99,15 @@ const PhotoScreen = () => {
       const imgBuffer = tf.util.encodeString(imgB64, "base64").buffer;
       const raw = new Uint8Array(imgBuffer);
       const imageTensor = imageToTensor(raw);
-      const predictions = await model.classify(imageTensor, 1);
-      if (predictions) {
-        const translation = await translate(predictions[0].className, {
-          to: "fi",
-        });
-        setPrediction(predictions[0].className);
-        setTranslation(translation);
+      if (model) {
+        const predictions = await model.classify(imageTensor, 1);
+        if (predictions) {
+          const translation = await translate(predictions[0].className, {
+            to: "fi",
+          });
+          setPrediction(predictions[0].className);
+          setTranslation(translation);
+        }
       }
     } catch (error) {
       console.log("Exception Error: ", error);
