@@ -52,6 +52,7 @@ const ShowTranslation = ({
       const storage = await AsyncStorage.getItem("vocabulary");
       if (isEmpty(storage)) {
         await AsyncStorage.setItem("vocabulary", JSON.stringify([data]));
+        setVocabSaved(true);
       } else {
         const vocabulary = JSON.parse(storage);
         const foundVocab = find(vocabulary, data);
